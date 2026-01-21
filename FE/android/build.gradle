@@ -1,0 +1,41 @@
+buildscript {
+    ext {
+        buildToolsVersion = "35.0.0" // Cập nhật bản build tools ổn định
+        minSdkVersion = 24
+        compileSdkVersion = 35      // SỬA: Hạ từ 36 xuống 34
+        targetSdkVersion = 34       // SỬA: Hạ từ 36 xuống 34
+        ndkVersion = "27.1.12297006"
+        kotlinVersion = "2.1.20"
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle")
+        classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        
+    }
+}
+
+// THÊM ĐOẠN NÀY VÀO CUỐI FILE ĐỂ NHẬN DIỆN THƯ VIỆN MOMO VÀ CÁC LIÊN KẾT NATIVE
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        // Thêm đoạn này vào bên dưới
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username = "mapbox"
+                password = project.findProperty("MAPBOX_DOWNLOADS_TOKEN") ?: ""
+            }
+        }
+    }
+}
+
+apply plugin: "com.facebook.react.rootproject"
